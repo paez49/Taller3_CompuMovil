@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.nuevo_parchaosr.R;
 import com.example.nuevo_parchaosr.activities.acces.LoginActivity;
+import com.example.nuevo_parchaosr.activities.amigos.AmigosFragment;
 import com.example.nuevo_parchaosr.activities.map.MapaFragment;
 import com.example.nuevo_parchaosr.activities.user.UserFragment;
 import com.example.nuevo_parchaosr.databinding.MainLayoutBinding;
@@ -33,8 +34,8 @@ public class MainActivity extends BasicActivity {
                 case R.id.mapa:
                     replaceFragment(new MapaFragment());
                     break;
-                case R.id.parches:
-
+                case R.id.amigos:
+                    replaceFragment(new AmigosFragment());
                     break;
                 case R.id.ajustes:
                     replaceFragment(new UserFragment());

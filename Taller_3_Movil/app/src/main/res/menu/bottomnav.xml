@@ -6,9 +6,9 @@
     android:title=""
     />
     <item
-        android:id="@+id/parches"
-        android:icon="@drawable/image_manage_parche"
-        android:title=""/>
+        android:id="@+id/amigos"
+        android:icon="@android:drawable/ic_menu_myplaces"
+        android:title="" />
     <item
         android:id="@+id/ajustes"
         android:icon="@drawable/image_account"

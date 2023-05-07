@@ -29,4 +29,6 @@
     <string name="snackBar_dismiss_label">error</string>
     <string name="identificaicon">Identificación</string>
     <string name="apellido">Apellido</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
