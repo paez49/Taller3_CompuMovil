@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<item
+    android:id="@+id/mapa"
+    android:icon="@drawable/image_map"
+    android:title=""
+    />
+    <item
+        android:id="@+id/parches"
+        android:icon="@drawable/image_manage_parche"
+        android:title=""/>
+    <item
+        android:id="@+id/ajustes"
+        android:icon="@drawable/image_account"
+        android:title=""/>
+</menu>

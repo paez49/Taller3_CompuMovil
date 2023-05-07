@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/fondo_aplicacion"
+    tools:context=".activities.user.UserFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="40dp">
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/CerrarCuenta"
+            android:layout_width="110dp"
+            android:layout_height="48dp"
+            android:background="@drawable/shape_rectangular_rounded_bg"
+            android:gravity="center"
+
+            android:text="@string/cerrar_sesi_n"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:layout_editor_absoluteX="244dp"
+            tools:layout_editor_absoluteY="546dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/EditarCuentaButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+
+            android:background="@drawable/shape_rectangular_rounded_bg"
+            android:gravity="center"
+            android:text="@string/editar_cuenta"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:layout_editor_absoluteX="48dp"
+            tools:layout_editor_absoluteY="547dp" />
+
+        <LinearLayout
+            android:layout_width="362dp"
+            android:layout_height="409dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Nombre"
+                    android:textSize="30sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="76dp"
+                android:orientation="vertical">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textField"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:orientation="vertical"></LinearLayout>
+        </LinearLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>
