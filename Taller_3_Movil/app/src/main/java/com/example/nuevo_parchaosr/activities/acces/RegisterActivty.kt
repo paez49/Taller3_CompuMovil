@@ -1,14 +1,17 @@
 package com.example.nuevo_parchaosr.activities.acces
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Patterns
 import android.view.KeyEvent
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.example.nuevo_parchaosr.R
 import com.example.nuevo_parchaosr.activities.MainActivity
 import com.example.nuevo_parchaosr.databinding.RegisterBinding
@@ -53,17 +56,25 @@ class RegisterActivty : AppCompatActivity() {
 
     }
   @SuppressLint("MissingPermission")
-  fun doRegister(){
-    if (permissionHelper.mLocationPermissionGranted){
-      if(formulariosValidos()){
+  fun doRegister() {
+    if (permissionHelper.mLocationPermissionGranted) {
+      if (formulariosValidos()) {
         val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         binding.emailInputR.error = null
         binding.passwordInputR.error = null
         binding.identificacionInputR.error = null
 
-        auth.createUserWithEmailAndPassword(binding.emailInputR.text.toString(),
-          binding.passwordInputR.text.toString())
+        val progressDialog = ProgressDialog(this, R.style.CustomProgressDialog)
+        progressDialog.setMessage("Creando cuenta...")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        auth.createUserWithEmailAndPassword(
+          binding.emailInputR.text.toString(),
+          binding.passwordInputR.text.toString()
+        )
           .addOnSuccessListener {
+            progressDialog.dismiss()
             var usuario = Usuario()
             usuario.nombre = binding.nombreInputR.text.toString()
             usuario.apellido = binding.apellidoInputR.text.toString()
@@ -77,24 +88,24 @@ class RegisterActivty : AppCompatActivity() {
                 this,
                 MainActivity::class.java
               )
-            ) }
+            )
+          }
           .addOnFailureListener { e: Exception ->
+            progressDialog.dismiss()
             if (e is FirebaseAuthUserCollisionException) {
               Toast.makeText(this, "El correo electrónico ya está en uso", Toast.LENGTH_SHORT).show()
             } else {
               Toast.makeText(this, "Fallo en la creación de la cuenta", Toast.LENGTH_SHORT).show()
             }
           }
-      }else{
+      } else {
         return
       }
-
-    }else{
+    } else {
       Toast.makeText(this, "Activa permisos de ubicacion.", Toast.LENGTH_SHORT).show()
     }
-
-
   }
+
   fun formulariosValidos(): Boolean{
     if (binding.emailInputR.text.toString().isEmpty() &&
       binding.passwordInputR.text.toString().isEmpty() &&

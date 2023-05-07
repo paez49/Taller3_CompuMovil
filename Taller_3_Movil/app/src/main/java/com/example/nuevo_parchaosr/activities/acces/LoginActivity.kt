@@ -1,6 +1,7 @@
 package com.example.nuevo_parchaosr.activities.acces
 
 import android.annotation.SuppressLint
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
@@ -86,11 +87,16 @@ class LoginActivity : BasicActivity() {
         }
         binding.emailInput.error = null
         binding.passwordInput.error = null
+      val progressDialog = ProgressDialog(this, R.style.CustomProgressDialog)
+      progressDialog.setMessage("Entrando a la cuenta...")
+      progressDialog.setCancelable(false)
+      progressDialog.show()
         auth.signInWithEmailAndPassword(
             binding.emailInput.text.toString(),
             binding.passwordInput.text.toString()
         )
             .addOnSuccessListener {
+              progressDialog.dismiss()
                 val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
                 val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
                 var latitud = location!!.latitude
@@ -103,7 +109,8 @@ class LoginActivity : BasicActivity() {
                     )
                 ) }
             .addOnFailureListener {
-                Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
+              progressDialog.dismiss()
+              Toast.makeText(this, "Correo o contraseña incorrectos", Toast.LENGTH_SHORT).show()
             }
     }
 
