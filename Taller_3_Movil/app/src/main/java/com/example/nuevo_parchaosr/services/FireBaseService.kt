@@ -37,6 +37,26 @@ class FireBaseService {
         referenceUsuario.child("latitud").setValue(latitud)
         referenceUsuario.child("longitud").setValue(longitud)
     }
+  fun obtenerUsuariosDisponibles(callback: (List<Usuario>) -> Unit) {
+    val referenciaUsuarios = database.getReference("usuarios")
+    referenciaUsuarios.orderByChild("disponible").equalTo(true)
+      .addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+          val usuarios = mutableListOf<Usuario>()
+          for (childSnapshot in snapshot.children) {
+            val usuario = childSnapshot.getValue(Usuario::class.java)
+            if (usuario != null) {
+              usuarios.add(usuario)
+            }
+          }
+          callback(usuarios)
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+          callback(emptyList())
+        }
+      })
+  }
 
 
 
