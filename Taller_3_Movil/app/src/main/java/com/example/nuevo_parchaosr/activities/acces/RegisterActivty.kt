@@ -1,6 +1,9 @@
 package com.example.nuevo_parchaosr.activities.acces
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Patterns
 import android.view.KeyEvent
@@ -11,6 +14,7 @@ import com.example.nuevo_parchaosr.activities.MainActivity
 import com.example.nuevo_parchaosr.databinding.RegisterBinding
 import com.example.nuevo_parchaosr.model.Usuario
 import com.example.nuevo_parchaosr.services.FireBaseService
+import com.example.nuevo_parchaosr.utils.PermissionHelper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
@@ -18,6 +22,8 @@ class RegisterActivty : AppCompatActivity() {
     private lateinit var binding: RegisterBinding
     var auth = FirebaseAuth.getInstance()
     private var fireBaseService = FireBaseService()
+  var permissionHelper = PermissionHelper()
+
 
   override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,9 +31,12 @@ class RegisterActivty : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+    permissionHelper.getLocationPermission(this)
+    if (!permissionHelper.mLocationPermissionGranted) {
+      Toast.makeText(this, "Activa permisos de ubicacion.", Toast.LENGTH_SHORT).show()
+    }
+
       binding.botonRegister.setOnClickListener {
-            //val intent = Intent(this, MainActivity::class.java)
-            //startActivity(intent)
         doRegister()
         }
       binding.inicioSesionDesdeRegister.setOnClickListener {
@@ -43,77 +52,108 @@ class RegisterActivty : AppCompatActivity() {
     }
 
     }
+  @SuppressLint("MissingPermission")
   fun doRegister(){
+    if (permissionHelper.mLocationPermissionGranted){
+      if(formulariosValidos()){
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        binding.emailInputR.error = null
+        binding.passwordInputR.error = null
+        binding.identificacionInputR.error = null
+
+        auth.createUserWithEmailAndPassword(binding.emailInputR.text.toString(),
+          binding.passwordInputR.text.toString())
+          .addOnSuccessListener {
+            var usuario = Usuario()
+            usuario.nombre = binding.nombreInputR.text.toString()
+            usuario.apellido = binding.apellidoInputR.text.toString()
+            usuario.numeroIdentificacion = binding.identificacionInputR.text.toString()
+            val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            usuario.latitud = location!!.latitude
+            usuario.longitud = location!!.longitude
+            fireBaseService.insertarUsuario(usuario)
+            startActivity(
+              Intent(
+                this,
+                MainActivity::class.java
+              )
+            ) }
+          .addOnFailureListener { e: Exception ->
+            if (e is FirebaseAuthUserCollisionException) {
+              Toast.makeText(this, "El correo electrónico ya está en uso", Toast.LENGTH_SHORT).show()
+            } else {
+              Toast.makeText(this, "Fallo en la creación de la cuenta", Toast.LENGTH_SHORT).show()
+            }
+          }
+      }else{
+        return
+      }
+
+    }else{
+      Toast.makeText(this, "Activa permisos de ubicacion.", Toast.LENGTH_SHORT).show()
+    }
+
+
+  }
+  fun formulariosValidos(): Boolean{
     if (binding.emailInputR.text.toString().isEmpty() &&
       binding.passwordInputR.text.toString().isEmpty() &&
       binding.identificacionInputR.text.toString().isEmpty() &&
-      binding.passwordConfirmInputR.text.toString().isEmpty()
+      binding.passwordConfirmInputR.text.toString().isEmpty() &&
+              binding.nombreInputR.text.toString().isEmpty() &&
+              binding.apellidoInputR.text.toString().isEmpty()
     ) {
       binding.emailInputR.error = getString(R.string.error_campos_vacios)
       binding.passwordInputR.error = getString(R.string.error_campos_vacios)
       binding.identificacionInputR.error = getString(R.string.error_campos_vacios)
       binding.passwordConfirmInputR.error = getString(R.string.error_campos_vacios)
-      return
+        binding.nombreInputR.error = getString(R.string.error_campos_vacios)
+        binding.apellidoInputR.error = getString(R.string.error_campos_vacios)
+      return false
     } else{
       if (binding.emailInputR.text.toString().isEmpty()){
         binding.emailInputR.error = getString(R.string.error_campos_vacios)
-        return
+        return false
       }
       if(binding.identificacionInputR.text.toString().isEmpty()){
         binding.identificacionInputR.error = getString(R.string.error_campos_vacios)
-        return
+        return false
       }
       if (binding.passwordInputR.text.toString().isEmpty()){
         binding.passwordInputR.error = getString(R.string.error_campos_vacios)
-        return
+        return false
       }
       if (binding.passwordConfirmInputR.text.toString().isEmpty()){
         binding.passwordConfirmInputR.error = getString(R.string.error_campos_vacios)
-        return
+        return false
       }
       if(!Patterns.EMAIL_ADDRESS.matcher(binding.emailInputR.text.toString()).matches()){
         binding.emailInputR.error = getString(R.string.error_correo_invalido)
-        return
+        return false
       }
       if(binding.passwordInputR.text.toString().length < 6){
         binding.passwordInputR.error = getString(R.string.error_password_corto)
-        return
+        return false
       }
       if(!binding.checkboxConfirmarTerminos.isChecked){
         Toast.makeText(this, "Debes aceptar los terminos y condiciones", Toast.LENGTH_SHORT).show()
-        return
+        return false
       }
       if (binding.passwordInputR.text.toString() != binding.passwordConfirmInputR.text.toString()){
         binding.passwordInputR.error = getString(R.string.error_passwords_no_coinciden)
         binding.passwordConfirmInputR.error = getString(R.string.error_passwords_no_coinciden)
-        return
+        return false
+      }
+      if(binding.nombreInputR.text.toString().isEmpty()){
+        binding.nombreInputR.error = getString(R.string.error_campos_vacios)
+        return false
+      }
+      if (binding.apellidoInputR.text.toString().isEmpty()){
+        binding.apellidoInputR.error = getString(R.string.error_campos_vacios)
+        return false
       }
     }
-    binding.emailInputR.error = null
-    binding.passwordInputR.error = null
-    binding.identificacionInputR.error = null
-
-    auth.createUserWithEmailAndPassword(binding.emailInputR.text.toString(),
-      binding.passwordInputR.text.toString())
-      .addOnSuccessListener {
-        var usuario = Usuario()
-        usuario.nombreUsuario = binding.identificacionInputR.text.toString()
-        usuario.email = binding.emailInputR.text.toString()
-        fireBaseService.insertarUsuario(usuario)
-        startActivity(
-          Intent(
-            this,
-            MainActivity::class.java
-          )
-        ) }
-      .addOnFailureListener { e: Exception ->
-        if (e is FirebaseAuthUserCollisionException) {
-          Toast.makeText(this, "El correo electrónico ya está en uso", Toast.LENGTH_SHORT).show()
-        } else {
-          Toast.makeText(this, "Fallo en la creación de la cuenta", Toast.LENGTH_SHORT).show()
-        }
-      }
-
+    return true
   }
   override fun onBackPressed() {
     val intent = Intent(this, LoginActivity::class.java)

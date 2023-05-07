@@ -55,8 +55,8 @@
 
       <LinearLayout
           android:id="@+id/linearLayout3"
-          android:layout_width="400dp"
-          android:layout_height="619dp"
+          android:layout_width="335dp"
+          android:layout_height="597dp"
           android:layout_marginTop="88dp"
           android:orientation="vertical"
           app:layout_constraintBottom_toBottomOf="parent"
@@ -159,7 +159,7 @@
                   android:layout_width="260dp"
                   android:layout_height="45dp"
                   android:background="@drawable/shape_higlightbox"
-                  android:inputType="number"
+                  android:inputType="text"
                   android:paddingLeft="16dp"
                   android:paddingRight="16dp" />
             </LinearLayout>
@@ -187,7 +187,7 @@
                 android:layout_width="260dp"
                 android:layout_height="45dp"
                 android:background="@drawable/shape_higlightbox"
-                android:inputType="number"
+                android:inputType="text"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp" />
           </LinearLayout>

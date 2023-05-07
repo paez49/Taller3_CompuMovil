@@ -32,5 +32,12 @@ class FireBaseService {
             }
         })
     }
+    fun actualizarUbicacionUsuario(latitud: Double, longitud: Double) {
+        val referenceUsuario = database.getReference("usuarios/${auth.currentUser?.uid}")
+        referenceUsuario.child("latitud").setValue(latitud)
+        referenceUsuario.child("longitud").setValue(longitud)
+    }
+
+
 
 }

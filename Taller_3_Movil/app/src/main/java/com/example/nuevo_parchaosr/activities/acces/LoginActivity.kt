@@ -1,6 +1,9 @@
 package com.example.nuevo_parchaosr.activities.acces
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Patterns
 import android.view.KeyEvent
@@ -9,11 +12,15 @@ import com.example.nuevo_parchaosr.R
 import com.example.nuevo_parchaosr.activities.BasicActivity
 import com.example.nuevo_parchaosr.activities.MainActivity
 import com.example.nuevo_parchaosr.databinding.LoginBinding
+import com.example.nuevo_parchaosr.services.FireBaseService
+import com.example.nuevo_parchaosr.utils.PermissionHelper
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : BasicActivity() {
     private lateinit var binding: LoginBinding
     var auth = FirebaseAuth.getInstance()
+    var fireBaseService = FireBaseService()
+    var permissionHelper = PermissionHelper()
     override fun onResume() {
         super.onResume()
         if (auth.currentUser != null) {
@@ -30,7 +37,7 @@ class LoginActivity : BasicActivity() {
         binding = LoginBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
+        permissionHelper.getLocationPermission(this)
         binding.loginButton.setOnClickListener {
             //val intent = Intent(this, MainActivity::class.java)
             //startActivity(intent)
@@ -50,6 +57,7 @@ class LoginActivity : BasicActivity() {
         }
 
     }
+    @SuppressLint("MissingPermission")
     fun doLogin(){
         if (binding.emailInput.text.toString().isEmpty() &&
             binding.passwordInput.text.toString().isEmpty()
@@ -71,6 +79,11 @@ class LoginActivity : BasicActivity() {
             }
 
         }
+
+        if (!permissionHelper.mLocationPermissionGranted) {
+            Toast.makeText(this, "Activa permisos de ubicacion.", Toast.LENGTH_SHORT).show()
+            return
+        }
         binding.emailInput.error = null
         binding.passwordInput.error = null
         auth.signInWithEmailAndPassword(
@@ -78,6 +91,11 @@ class LoginActivity : BasicActivity() {
             binding.passwordInput.text.toString()
         )
             .addOnSuccessListener {
+                val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+                val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+                var latitud = location!!.latitude
+                var longitud = location!!.longitude
+                fireBaseService.actualizarUbicacionUsuario(latitud, longitud)
                 startActivity(
                     Intent(
                         this,
