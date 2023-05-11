@@ -30,15 +30,17 @@ class AmigosFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_amigos_fragment, container, false)
-    }
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    // Inflate the layout for this fragment
+    binding = FragmentAmigosFragmentBinding.inflate(inflater)
+    return binding!!.root
+  }
 
-    companion object {
+
+  companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -57,4 +59,23 @@ class AmigosFragment : Fragment() {
                 }
             }
     }
+<<<<<<< Updated upstream
 }
+=======
+  override fun onResume() {
+    super.onResume()
+    fireBaseService.obtenerUsuariosDisponibles { listaUsuariosDisponibles ->
+      if(!listaUsuariosDisponibles.isNullOrEmpty()){
+        val listaDeNombresDeUsuarios = listaUsuariosDisponibles.map { it.nombre }
+        val adapter = ArrayAdapter(requireContext(), R.layout.custom_list_item, listaDeNombresDeUsuarios)
+        binding?.listViewParches?.adapter = adapter
+        binding?.listViewParches?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+          // Implementa el comportamiento deseado al hacer clic en un elemento de la lista
+        }
+      }
+    }
+
+
+  }
+}
+>>>>>>> Stashed changes
