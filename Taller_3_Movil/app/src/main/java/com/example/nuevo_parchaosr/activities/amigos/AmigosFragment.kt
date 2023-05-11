@@ -38,13 +38,14 @@ class AmigosFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_amigos_fragment, container, false)
-    }
+  override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?
+  ): View? {
+    // Inflate the layout for this fragment
+    binding = FragmentAmigosFragmentBinding.inflate(inflater)
+    return binding!!.root
+  }
 
     companion object {
         /**
@@ -69,18 +70,15 @@ class AmigosFragment : Fragment() {
     super.onResume()
     fireBaseService.obtenerUsuariosDisponibles { listaUsuariosDisponibles ->
       if(!listaUsuariosDisponibles.isNullOrEmpty()){
-        
-      }
-      val adapter = ArrayAdapter(requireContext(), R.layout.custom_list_item, listaDeKeys)
-      binding?.listViewParches?.adapter = adapter
-      binding?.listViewParches?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-        val args = Bundle()
-        if (listaDeKeys[position] == "No haces parte de ningun parche"){
-          Snackbar.make(requireView(),"No haces parte de ningun parche",Snackbar.LENGTH_SHORT).show()
+        val listaDeNombresDeUsuarios = listaUsuariosDisponibles.map { it.nombre } //obtener solo los nombres de usuario
+        val adapter = ArrayAdapter(requireContext(), R.layout.custom_list_item, listaDeNombresDeUsuarios)
+        binding?.listViewParches?.adapter = adapter
+        binding?.listViewParches?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+          // Implementa el comportamiento deseado al hacer clic en un elemento de la lista
         }
-
       }
     }
+
 
   }
 }
