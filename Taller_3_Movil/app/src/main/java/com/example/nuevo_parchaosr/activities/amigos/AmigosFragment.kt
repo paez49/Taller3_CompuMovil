@@ -47,7 +47,7 @@ class AmigosFragment : Fragment() {
     return binding!!.root
   }
 
-    companion object {
+  companion object {
         /**
          * Use this factory method to create a new instance of
          * this fragment using the provided parameters.
@@ -66,10 +66,13 @@ class AmigosFragment : Fragment() {
                 }
             }
     }
+}
+
   override fun onResume() {
     super.onResume()
     fireBaseService.obtenerUsuariosDisponibles { listaUsuariosDisponibles ->
       if(!listaUsuariosDisponibles.isNullOrEmpty()){
+
         val listaDeNombresDeUsuarios = listaUsuariosDisponibles.map { it.nombre } //obtener solo los nombres de usuario
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_list_item, listaDeNombresDeUsuarios)
         binding?.listViewParches?.adapter = adapter
