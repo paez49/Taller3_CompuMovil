@@ -5,7 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.example.nuevo_parchaosr.R
+import com.example.nuevo_parchaosr.databinding.FragmentAmigosFragmentBinding
+import com.example.nuevo_parchaosr.services.FireBaseService
+import com.google.android.material.snackbar.Snackbar
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +26,9 @@ class AmigosFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    lateinit var binding : FragmentAmigosFragmentBinding
+    var fireBaseService = FireBaseService()
+  var listaDeKeys = mutableListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +46,6 @@ class AmigosFragment : Fragment() {
     binding = FragmentAmigosFragmentBinding.inflate(inflater)
     return binding!!.root
   }
-
 
   companion object {
         /**
@@ -59,14 +66,14 @@ class AmigosFragment : Fragment() {
                 }
             }
     }
-<<<<<<< Updated upstream
 }
-=======
+
   override fun onResume() {
     super.onResume()
     fireBaseService.obtenerUsuariosDisponibles { listaUsuariosDisponibles ->
       if(!listaUsuariosDisponibles.isNullOrEmpty()){
-        val listaDeNombresDeUsuarios = listaUsuariosDisponibles.map { it.nombre }
+
+        val listaDeNombresDeUsuarios = listaUsuariosDisponibles.map { it.nombre } //obtener solo los nombres de usuario
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_list_item, listaDeNombresDeUsuarios)
         binding?.listViewParches?.adapter = adapter
         binding?.listViewParches?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
@@ -78,4 +85,3 @@ class AmigosFragment : Fragment() {
 
   }
 }
->>>>>>> Stashed changes
