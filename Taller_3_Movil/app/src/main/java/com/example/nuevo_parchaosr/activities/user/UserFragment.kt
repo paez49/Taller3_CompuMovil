@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import com.example.nuevo_parchaosr.activities.BasicFragment
 import com.example.nuevo_parchaosr.activities.acces.LoginActivity
 import com.example.nuevo_parchaosr.databinding.FragmentUserBinding
@@ -63,9 +64,7 @@ class UserFragment : BasicFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fireBaseService.obtenerUsuarioPorId(auth.currentUser!!.uid) { usuario ->
 
-        }
         binding.CerrarCuenta.setOnClickListener {
             val positiveListener = DialogInterface.OnClickListener { dialog, which ->
                 FirebaseAuth.getInstance().signOut();
@@ -82,18 +81,26 @@ class UserFragment : BasicFragment() {
             )
         }
 
-        binding.EditarCuentaButton.setOnClickListener {
-            if (isEditable) {
-
-            } else {
-
-            }
-            isEditable = !isEditable
+  binding.EditarCuentaButton.setOnClickListener {
 
 
-        }
+    if(!binding.nombreInput.text?.isEmpty()){
+      fireBaseService.actualizarNombreUsuario(binding.nombreInput.text.toString())
+    }
+  }
 
     }
+
+  override fun onResume() {
+    super.onResume()
+    fireBaseService.obtenerUsuarioPorId(auth.currentUser!!.uid) { usuario ->
+        binding.nombreInput.hint = usuario?.nombre
+        binding.apellidoInput.hint = usuario?.apellido
+        binding.emailInput.hint = auth!!.currentUser?.email.toString()
+        binding.identificacionInput.hint = usuario?.numeroIdentificacion
+
+    }
+  }
 
 }
 

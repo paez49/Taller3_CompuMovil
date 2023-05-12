@@ -2,6 +2,7 @@ package com.example.nuevo_parchaosr.services
 
 import com.example.nuevo_parchaosr.model.Usuario
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 
@@ -10,7 +11,6 @@ class FireBaseService {
 
     private val database: FirebaseDatabase by lazy { FirebaseDatabase.getInstance() }
     private val auth = FirebaseAuth.getInstance()
-    private val storage = FirebaseStorage.getInstance()
     fun insertarUsuario(usuario: Usuario) {
         val referenceUsuario = database.getReference("usuarios/${auth.currentUser?.uid}")
         referenceUsuario.setValue(usuario)
@@ -57,7 +57,30 @@ class FireBaseService {
         }
       })
   }
+  fun actualizarNombreUsuario(nombre: String) {
+    val user = auth.currentUser
 
+    user?.let {
+      val databaseReference = database.getReference("usuarios/${user.uid}")
+      databaseReference.child("nombre").setValue(nombre)
+    }
+  }
+  fun actualizarApellidoUsuario(apellido: String) {
+    val user = auth.currentUser
+
+    user?.let {
+      val databaseReference = database.getReference("usuarios/${user.uid}")
+      databaseReference.child("apellido").setValue(apellido)
+    }
+  }
+  fun actualizarIdentificacionUsuario(identificacion: String) {
+    val user = auth.currentUser
+
+    user?.let {
+      val databaseReference = database.getReference("usuarios/${user.uid}")
+      databaseReference.child("identificacion").setValue(identificacion)
+    }
+  }
 
 
 }
