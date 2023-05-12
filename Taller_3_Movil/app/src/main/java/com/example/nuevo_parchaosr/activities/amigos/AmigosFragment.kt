@@ -66,7 +66,7 @@ class AmigosFragment : Fragment() {
                 }
             }
     }
-}
+
 
   override fun onResume() {
     super.onResume()
