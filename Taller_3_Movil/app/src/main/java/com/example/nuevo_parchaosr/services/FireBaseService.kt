@@ -122,6 +122,22 @@ class FireBaseService {
             databaseReference.child("disponible").setValue(b)
         }
     }
+    fun obtenerDisponibilidadUsuario(onSuccess: (Boolean) -> Unit, onError: (DatabaseError) -> Unit) {
+        val user = auth.currentUser
+        user?.let {
+            val databaseReference = database.getReference("usuarios/${user.uid}/disponible")
+            databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    val disponible = dataSnapshot.getValue(Boolean::class.java)
+                    onSuccess.invoke(disponible ?: false)
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    onError.invoke(databaseError)
+                }
+            })
+        }
+    }
 
 
 }
