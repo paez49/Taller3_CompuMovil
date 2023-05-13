@@ -72,13 +72,19 @@ class AmigosFragment : Fragment() {
     super.onResume()
     fireBaseService.obtenerUsuariosDisponibles { listaUsuariosDisponibles ->
       if(!listaUsuariosDisponibles.isNullOrEmpty()){
-
         val listaDeNombresDeUsuarios = listaUsuariosDisponibles.map { it.nombre } //obtener solo los nombres de usuario
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_list_item, listaDeNombresDeUsuarios)
         binding?.listViewParches?.adapter = adapter
         binding?.listViewParches?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
           // Implementa el comportamiento deseado al hacer clic en un elemento de la lista
         }
+      }else{
+          val snackbar = Snackbar.make(binding.root, "No hay usuarios disponibles", Snackbar.LENGTH_LONG)
+          snackbar.setAction("Cerrar") {
+              snackbar.dismiss()
+          }
+          snackbar.show()
+
       }
     }
 

@@ -13,6 +13,7 @@ class Usuario {
     var numeroIdentificacion: String = ""
     var latitud:Double = 0.0
     var longitud:Double = 0.0
+    var correo = ""
     var disponible = false
     fun Usuario(){}
 }

@@ -1,5 +1,6 @@
 package com.example.nuevo_parchaosr.activities.user
 
+import android.app.ProgressDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +8,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isEmpty
+import androidx.fragment.app.Fragment
+import com.example.nuevo_parchaosr.R
 import com.example.nuevo_parchaosr.activities.BasicFragment
 import com.example.nuevo_parchaosr.activities.acces.LoginActivity
+import com.example.nuevo_parchaosr.activities.amigos.AmigosFragment
 import com.example.nuevo_parchaosr.databinding.FragmentUserBinding
 import com.example.nuevo_parchaosr.services.FireBaseService
 import com.example.nuevo_parchaosr.utils.PermissionHelper
@@ -26,11 +31,11 @@ class UserFragment : BasicFragment() {
     private var param1: String? = null
     private var param2: String? = null
     lateinit var binding: FragmentUserBinding
-    private var isEditable = false
+    var cambios:Boolean = false
+
 
     var auth = FirebaseAuth.getInstance()
     private val fireBaseService = FireBaseService()
-    var permissionHelper = PermissionHelper()
 
 
     override fun onCreateView(
@@ -65,6 +70,7 @@ class UserFragment : BasicFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         binding.CerrarCuenta.setOnClickListener {
             val positiveListener = DialogInterface.OnClickListener { dialog, which ->
                 FirebaseAuth.getInstance().signOut();
@@ -81,26 +87,60 @@ class UserFragment : BasicFragment() {
             )
         }
 
-  binding.EditarCuentaButton.setOnClickListener {
+        binding.disponibleSwitch.setOnCheckedChangeListener { _, isChecked ->
+            cambios = true
+        }
+        binding.EditarCuentaButton.setOnClickListener {
 
+            if (binding.nombreInput.text?.isNotEmpty() == true) {
+                cambios = true
+                fireBaseService.actualizarNombreUsuario(binding.nombreInput.text.toString())
+            }
+            if (binding.apellidoInput.text?.isNotEmpty() == true) {
+                fireBaseService.actualizarApellidoUsuario(binding.apellidoInput.text.toString())
+                cambios = true
+            }
+            if (binding.identificacionInput.text?.isNotEmpty() == true) {
+                fireBaseService.actualizarIdentificacionUsuario(binding.identificacionInput.text.toString())
+                cambios = true
+            }
+            /*
+            if (binding.emailInput.text?.isNotEmpty() == true) {
+                fireBaseService.actualizarCorreoUsuario(binding.emailInput.text.toString(),
+            }
+            if (binding.contraseniaInput.text?.isNotEmpty() == true) {
+                fireBaseService.actualizarContrasenaUsuario(binding.contraseniaInput.text.toString())
+            }
+            */
+            if (binding.identificacionInput.text?.isNotEmpty() == true) {
+                fireBaseService.actualizarIdentificacionUsuario(binding.identificacionInput.text.toString())
+                cambios = true
+            }
 
-    if(!binding.nombreInput.text?.isEmpty()){
-      fireBaseService.actualizarNombreUsuario(binding.nombreInput.text.toString())
+            fireBaseService.actualizarDisponibilidadUsuario(binding.disponibleSwitch.isChecked)
+            if (cambios) {
+                Toast.makeText(activity, "Datos actualizados", Toast.LENGTH_SHORT).show()
+            }
+            replaceFragment(AmigosFragment())
+        }
+
     }
-  }
-
+    override fun onResume() {
+        super.onResume()
+        cambios= false
+        fireBaseService.obtenerUsuarioPorId(auth.currentUser!!.uid) { usuario ->
+            binding.nombreInput.hint = usuario?.nombre
+            binding.apellidoInput.hint = usuario?.apellido
+            binding.emailInput.setText(auth.currentUser?.email.toString())
+            binding.identificacionInput.hint = usuario?.numeroIdentificacion
+            binding.disponibleSwitch.isChecked = usuario?.disponible == true
+        }
     }
 
-  override fun onResume() {
-    super.onResume()
-    fireBaseService.obtenerUsuarioPorId(auth.currentUser!!.uid) { usuario ->
-        binding.nombreInput.hint = usuario?.nombre
-        binding.apellidoInput.hint = usuario?.apellido
-        binding.emailInput.hint = auth!!.currentUser?.email.toString()
-        binding.identificacionInput.hint = usuario?.numeroIdentificacion
-
+    fun replaceFragment(fragment: Fragment) {
+        val fragmentTransaction = fragmentManager?.beginTransaction()
+        fragmentTransaction?.replace(R.id.frame_layout, fragment)
+        fragmentTransaction?.commit()
     }
-  }
-
 }
 

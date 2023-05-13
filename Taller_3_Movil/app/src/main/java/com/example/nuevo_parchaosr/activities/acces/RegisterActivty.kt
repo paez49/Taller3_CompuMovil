@@ -79,6 +79,7 @@ class RegisterActivty : AppCompatActivity() {
             usuario.nombre = binding.nombreInputR.text.toString()
             usuario.apellido = binding.apellidoInputR.text.toString()
             usuario.numeroIdentificacion = binding.identificacionInputR.text.toString()
+            usuario.correo = binding.emailInputR.text.toString()
             val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
             usuario.latitud = location!!.latitude
             usuario.longitud = location!!.longitude

@@ -50,8 +50,8 @@
 
         <LinearLayout
             android:id="@+id/linearLayout2"
-            android:layout_width="357dp"
-            android:layout_height="359dp"
+            android:layout_width="354dp"
+            android:layout_height="374dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="172dp"
             android:orientation="vertical"
@@ -70,22 +70,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:orientation="vertical">
+
                 <TextView
-                  android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:text="Nombre"
-                  android:textColor="@color/black"
-                  android:gravity="center"></TextView>
-                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre"
-                  >
+                    android:gravity="center"
+                    android:text="Nombre"
+                    android:textColor="@color/black"></TextView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
-                      android:id="@+id/nombreInput"
+                        android:id="@+id/nombreInput"
 
-                      android:layout_width="match_parent"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -96,22 +96,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="69dp"
                 android:orientation="vertical">
-              <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Apellido"
-                android:textColor="@color/black"
-                android:gravity="center"></TextView>
-                <com.google.android.material.textfield.TextInputLayout
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Apellido">
+                    android:gravity="center"
+                    android:text="Apellido"
+                    android:textColor="@color/black"></TextView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/apellidoInput"
                         android:layout_width="match_parent"
-                      android:id="@+id/apellidoInput"
 
-                      android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -120,45 +121,56 @@
                 android:layout_width="match_parent"
                 android:layout_height="69dp"
                 android:orientation="vertical">
-              <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Email"
-                android:textColor="@color/black"
-                android:gravity="center"></TextView>
-                <com.google.android.material.textfield.TextInputLayout
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Email">
+                    android:gravity="center"
+                    android:text="Email"
+                    android:textColor="@color/black"></TextView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
-                      android:id="@+id/emailInput"
-
-                      android:layout_width="match_parent"
+                        android:id="@+id/emailInput"
+                        android:editable="false"
+                        android:textColor="@color/gray"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:checked="true"
+                    android:text="xd" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="75dp"
                 android:orientation="vertical">
-              <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Contraseña"
-                android:textColor="@color/black"
-                android:gravity="center"></TextView>
-                <com.google.android.material.textfield.TextInputLayout
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Contraseña">
+                    android:gravity="center"
+                    android:text="Contraseña"
+                    android:textColor="@color/black"></TextView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <com.google.android.material.textfield.TextInputEditText
-                      android:id="@+id/contraseniaInput"
-
-                      android:layout_width="match_parent"
+                        android:id="@+id/contraseniaInput"
+                        android:editable="false"
+                        android:textColor="@color/gray"
+                        android:text="@string/asteriscosXD"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -166,28 +178,42 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:orientation="vertical">
-              <TextView
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Identificacion"
-                android:textColor="@color/black"
-                android:gravity="center"></TextView>
-                <com.google.android.material.textfield.TextInputLayout
+                android:orientation="vertical">
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Identificacion">
+                    android:gravity="center"
+                    android:text="Identificacion"
+                    android:textColor="@color/black"></TextView>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp">
 
                     <com.google.android.material.textfield.TextInputEditText
 
-                      android:id="@+id/identificacionInput"
-                      android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:id="@+id/identificacionInput"
+                        android:layout_width="match_parent"
+                        android:layout_height="49dp"
+                        android:inputType="number"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/disponibleSwitch"
+            android:layout_width="184dp"
+            android:layout_height="65dp"
+            android:text="@string/disponible"
+            android:textSize="25sp"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.122"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -200,7 +226,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

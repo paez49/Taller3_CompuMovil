@@ -27,7 +27,7 @@ public class MainActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         binding = MainLayoutBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        replaceFragment(new MapaFragment());
+        replaceFragment(new AmigosFragment());
 
         binding.bottomNav.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
