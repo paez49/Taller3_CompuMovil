@@ -134,6 +134,7 @@ class FireBaseService {
             })
         }
     }
+    //Funcion inutil
     fun actualizarUbicacionPorUsuario(usuario: Usuario,nuevaLatitud: Double,nuevaLongitud: Double) {
         val ref = FirebaseDatabase.getInstance().getReference("usuarios")
         val query: Query = ref.orderByChild("correo").equalTo(usuario.correo)
@@ -168,5 +169,64 @@ class FireBaseService {
 
 
     }
+    //Actualizar la ubicación del propio usuario en firebase
+    fun actualizarUbicacionPorUid(nuevaLatitud: Double,nuevaLongitud: Double){
+        var userEmail = auth.currentUser!!.email.toString()
+        val ref = FirebaseDatabase.getInstance().getReference("usuarios")
+        val query: Query = ref.orderByChild("correo").equalTo(userEmail)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val usuarioSnapshot = dataSnapshot.children.first()
+                    val usuarioId = usuarioSnapshot.key!!
+                    val usuarioRef = ref.child(usuarioId)
+                    val actualizacion: MutableMap<String, Any> = HashMap()
+                    actualizacion["latitud"] = nuevaLatitud
+                    actualizacion["longitud"] = nuevaLongitud
+                    usuarioRef.updateChildren(actualizacion)
+                        .addOnSuccessListener {
+                            Log.i("Actualizacion","Actualizacion exitosa")
+                        }
+                        .addOnFailureListener {
+                            Log.i("Actualizacion","Actualizacion fallida")
+                        }
+                } else {
+                    Log.i("Error","No existe el usuario")
+                }
+            }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Manejar el error en caso de que ocurra.
+            }
+        })
+    }
+    //Dado un usuario obtener la ubicacion de este
+    fun obtenerUbicacionUsuario(usuario: Usuario, onSuccess: (latitud: Double, longitud: Double) -> Unit, onError: (error: DatabaseError) -> Unit) {
+        val ref = FirebaseDatabase.getInstance().getReference("usuarios")
+        val query: Query = ref.orderByChild("correo").equalTo(usuario.correo)
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val usuarioSnapshot = dataSnapshot.children.first()
+                    val latitud = usuarioSnapshot.child("latitud").getValue(Double::class.java)
+                    val longitud = usuarioSnapshot.child("longitud").getValue(Double::class.java)
+
+                    if (latitud != null && longitud != null) {
+                        Log.i("Latitud",latitud.toString())
+                        Log.i("Longitud",longitud.toString())
+                        onSuccess(latitud, longitud)
+                    } else {
+                        onError(DatabaseError.fromException(Exception("Error al obtener latitud y longitud")))
+                    }
+                } else {
+                    onError(DatabaseError.fromException(Exception("No se encontró el usuario")))
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                onError(databaseError)
+            }
+        })
+    }
 }
