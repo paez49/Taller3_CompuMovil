@@ -229,4 +229,20 @@ class FireBaseService {
             }
         })
     }
+    fun estaDisponibleuId(onSuccess: (disponible: Boolean) -> Unit, onError: (error: DatabaseError) -> Unit){
+        var userEmail = auth.currentUser!!.email.toString()
+        val ref = FirebaseDatabase.getInstance().getReference("usuarios")
+        val query: Query = ref.orderByChild("correo").equalTo(userEmail)
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val disponible = dataSnapshot.exists()
+                onSuccess(disponible)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                onError(databaseError)
+            }
+        })
+    }
 }
