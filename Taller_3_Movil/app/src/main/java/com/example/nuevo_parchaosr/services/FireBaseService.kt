@@ -2,13 +2,9 @@ package com.example.nuevo_parchaosr.services
 
 import android.util.Log
 import com.example.nuevo_parchaosr.model.Usuario
-import com.example.nuevo_parchaosr.services.LocationService.TAG
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.*
-import com.google.firebase.storage.FirebaseStorage
 
 
 class FireBaseService {
@@ -138,6 +134,39 @@ class FireBaseService {
             })
         }
     }
+    fun actualizarUbicacionPorUsuario(usuario: Usuario,nuevaLatitud: Double,nuevaLongitud: Double) {
+        val ref = FirebaseDatabase.getInstance().getReference("usuarios")
+        val query: Query = ref.orderByChild("correo").equalTo(usuario.correo)
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val usuarioSnapshot = dataSnapshot.children.first()
+                    val usuarioId = usuarioSnapshot.key!!
+                    Log.i("Usuario",usuarioId)
+                    Log.i("Usuario",dataSnapshot.children.first().toString())
+                    val usuarioRef = ref.child(usuarioId)
+                    val actualizacion: MutableMap<String, Any> = HashMap()
+                    actualizacion["latitud"] = nuevaLatitud
+                    actualizacion["longitud"] = nuevaLongitud
+                    Log.i("Actualizacion",actualizacion.toString())
+                    usuarioRef.updateChildren(actualizacion)
+                        .addOnSuccessListener {
+                            Log.i("Actualizacion","Actualizacion exitosa")
+                        }
+                        .addOnFailureListener {
+                            Log.i("Actualizacion","Actualizacion fallida")
+                        }
+                } else {
+                   Log.i("Error","No existe el usuario")
+                }
+            }
 
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Manejar el error en caso de que ocurra.
+            }
+        })
+
+
+    }
 
 }
