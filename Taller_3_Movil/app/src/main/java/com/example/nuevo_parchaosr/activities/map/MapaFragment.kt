@@ -212,10 +212,8 @@ class MapaFragment : BasicFragment(), OnMapReadyCallback,OnMarkerClickListener,
                    map.clear()
                    createMarker(LatLng(location.latitude, location.longitude), "Tu")
                }
-               fireBaseService.obtenerUsuarioPorId("qa")
-               { usuario ->
-                   if(usuario!=null)
-                    fireBaseService.obtenerUbicacionPorCorreo(usuario.correo, onSuccess =
+
+                    fireBaseService.obtenerUbicacionPorCorreo(correo, onSuccess =
                     {
                         latitud, longitud ->
                         createMarker(LatLng(latitud,longitud), "Amigo")
@@ -229,7 +227,7 @@ class MapaFragment : BasicFragment(), OnMapReadyCallback,OnMarkerClickListener,
                             ).show()
                         })
 
-               }
+
 
 
            }
