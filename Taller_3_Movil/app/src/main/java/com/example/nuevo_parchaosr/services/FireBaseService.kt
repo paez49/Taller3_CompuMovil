@@ -201,9 +201,9 @@ class FireBaseService {
         })
     }
     //Dado un usuario obtener la ubicacion de este
-    fun obtenerUbicacionUsuario(usuario: Usuario, onSuccess: (latitud: Double, longitud: Double) -> Unit, onError: (error: DatabaseError) -> Unit) {
+    fun obtenerUbicacionUsuario(correo: String, onSuccess: (latitud: Double, longitud: Double) -> Unit, onError: (error: DatabaseError) -> Unit) {
         val ref = FirebaseDatabase.getInstance().getReference("usuarios")
-        val query: Query = ref.orderByChild("correo").equalTo(usuario.correo)
+        val query: Query = ref.orderByChild("correo").equalTo(correo)
 
         query.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {

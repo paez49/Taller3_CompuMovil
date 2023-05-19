@@ -1,16 +1,19 @@
 package com.example.nuevo_parchaosr.activities.amigos
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.fragment.app.Fragment
 import com.example.nuevo_parchaosr.R
+import com.example.nuevo_parchaosr.activities.map.MapaFragment
 import com.example.nuevo_parchaosr.databinding.FragmentAmigosFragmentBinding
+import com.example.nuevo_parchaosr.activities.BasicFragment
 import com.example.nuevo_parchaosr.services.FireBaseService
 import com.google.android.material.snackbar.Snackbar
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,15 +25,15 @@ private const val ARG_PARAM2 = "param2"
  * Use the [AmigosFragment+.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AmigosFragment : Fragment() {
+class AmigosFragment : BasicFragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
     lateinit var binding : FragmentAmigosFragmentBinding
     var fireBaseService = FireBaseService()
-  var listaDeKeys = mutableListOf<String>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+  override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
@@ -76,7 +79,12 @@ class AmigosFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.custom_list_item, listaDeNombresDeUsuarios)
         binding?.listViewParches?.adapter = adapter
         binding?.listViewParches?.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-          // Implementa el comportamiento deseado al hacer clic en un elemento de la lista
+          val bundle = Bundle()
+          bundle.putString("correoUsuario", listaUsuariosDisponibles[position].correo)
+          bundle.putString("nombreUsuario", listaUsuariosDisponibles[position].nombre)
+          val mapaFragment = MapaFragment()
+          mapaFragment.arguments = bundle
+          replaceFragment(mapaFragment)
         }
       }else{
           val snackbar = Snackbar.make(binding.root, "No hay usuarios disponibles", Snackbar.LENGTH_LONG)
@@ -89,5 +97,10 @@ class AmigosFragment : Fragment() {
     }
 
 
+  }
+  fun replaceFragment(fragment : Fragment){
+    val fragmentTransaction = fragmentManager?.beginTransaction()
+    fragmentTransaction?.replace(R.id.frame_layout,fragment)
+    fragmentTransaction?.commit()
   }
 }

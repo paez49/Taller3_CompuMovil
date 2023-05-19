@@ -40,9 +40,14 @@ class MapaFragment : BasicFragment(), OnMapReadyCallback,OnMarkerClickListener,
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     private var fireBaseService = FireBaseService()
     private lateinit var locationCallback: LocationCallback
+    private var correo: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+      val bundle = this.arguments
+        if (bundle != null) {
+            correo = bundle.getString("correo").toString()
+        }
     }
      var permissionHelper = PermissionHelper()
     @SuppressLint("MissingPermission", "ResourceType")
@@ -100,12 +105,19 @@ class MapaFragment : BasicFragment(), OnMapReadyCallback,OnMarkerClickListener,
 
     override fun onResume() {
         super.onResume()
+      val bundle = this.arguments
+      if (bundle != null) {
+        correo = bundle.getString("correoUsuario").toString()
+      }
+      Toast.makeText(requireContext(), "Bienvenido $correo", Toast.LENGTH_SHORT).show()
         stayAlive= true
         startLocationUpdates()
 
        }
 
     override fun onPause() {
+
+
         stayAlive= false
         startLocationUpdates()
         super.onPause()
@@ -203,7 +215,7 @@ class MapaFragment : BasicFragment(), OnMapReadyCallback,OnMarkerClickListener,
                fireBaseService.obtenerUsuarioPorId("qa")
                { usuario ->
                    if(usuario!=null)
-                    fireBaseService.obtenerUbicacionUsuario(usuario, onSuccess =
+                    fireBaseService.obtenerUbicacionUsuario(usuario.correo, onSuccess =
                     {
                         latitud, longitud ->
                         createMarker(LatLng(latitud,longitud), "Amigo")
