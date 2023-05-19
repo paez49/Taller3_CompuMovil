@@ -201,7 +201,7 @@ class FireBaseService {
         })
     }
     //Dado un usuario obtener la ubicacion de este
-    fun obtenerUbicacionUsuario(correo: String, onSuccess: (latitud: Double, longitud: Double) -> Unit, onError: (error: DatabaseError) -> Unit) {
+    fun obtenerUbicacionPorCorreo(correo: String, onSuccess: (latitud: Double, longitud: Double) -> Unit, onError: (error: DatabaseError) -> Unit) {
         val ref = FirebaseDatabase.getInstance().getReference("usuarios")
         val query: Query = ref.orderByChild("correo").equalTo(correo)
 
